@@ -1,8 +1,8 @@
 /*
  * timer.h
  *
- *  Created on: 12 Oca 2023
- *      Author: metab
+ *
+ *      Author: Baris Cakir
  */
 
 #ifndef TIMER_H_

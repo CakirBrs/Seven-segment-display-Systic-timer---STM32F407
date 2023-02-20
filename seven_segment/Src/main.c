@@ -16,43 +16,34 @@
  ******************************************************************************
  */
 
+/*
+ *
+ * Seven segment Pin A:PD0
+ * Seven segment Pin B:PD1
+ * Seven segment Pin C:PD2
+ * Seven segment Pin D:PD3
+ * Seven segment Pin E:PD4
+ * Seven segment Pin F:PD5
+ * Seven segment Pin G:PD6
+ *
+ */
+
+
+
 #include <stdint.h>
 #include "stm32f407xx.h"
 #include "gpio.h"
 #include "timer.h"
 #include "coreM4.h"
-
+#include "sevenSegment.h"
 
 uint8_t nmbr=0;
-uint8_t numbers_of_7segment[10]={
-			0x3f,
-			0x06,
-			0x5b,
-			0x4f,
-			0x66,
-			0x6d,
-			0x7d,
-			0x07,
-			0x7f,
-			0x6f
-	};
-
-void update_of_7segment(uint8_t number){
-	gpio_writeto_output_pin(GPIOD, GPIO_PIN_NO_0, ((number>>0)&0x01));
-	gpio_writeto_output_pin(GPIOD, GPIO_PIN_NO_1, ((number>>1)&0x01));
-	gpio_writeto_output_pin(GPIOD, GPIO_PIN_NO_2, ((number>>2)&0x01));
-	gpio_writeto_output_pin(GPIOD, GPIO_PIN_NO_3, ((number>>3)&0x01));
-	gpio_writeto_output_pin(GPIOD, GPIO_PIN_NO_4, ((number>>4)&0x01));
-	gpio_writeto_output_pin(GPIOD, GPIO_PIN_NO_5, ((number>>5)&0x01));
-	gpio_writeto_output_pin(GPIOD, GPIO_PIN_NO_6, ((number>>6)&0x01));
-}
-
 
 void SysTick_Handler(){
 
 	gpio_toggleto_output_pin(GPIOD, GPIO_PIN_NO_15);
 
-	update_of_7segment(numbers_of_7segment[nmbr]);
+	update_of_7segment(nmbr);
 	if(nmbr<9){
 		nmbr++;
 	}else{
@@ -64,8 +55,8 @@ void SysTick_Handler(){
 int main(void)
 {
 
-	GPIO_Handle_t blue ={GPIOD,{GPIO_PIN_NO_15,GPIO_MODE_OUT,GPIO_SPEED_MEDIUM,GPIO_OTYPE_PP,GPIO_NO_PUPD}};
-	gpio_init(&blue);
+	GPIO_Handle_t systic_indicator_blinking_led ={GPIOD,{GPIO_PIN_NO_15,GPIO_MODE_OUT,GPIO_SPEED_MEDIUM,GPIO_OTYPE_PP,GPIO_NO_PUPD}};
+	gpio_init(&systic_indicator_blinking_led);
 
 	GPIO_Handle_t gpioA_7segmentA ={GPIOD,{GPIO_PIN_NO_0,GPIO_MODE_OUT,GPIO_SPEED_MEDIUM,GPIO_OTYPE_PP,GPIO_NO_PUPD}};
 	GPIO_Handle_t gpioA_7segmentB ={GPIOD,{GPIO_PIN_NO_1,GPIO_MODE_OUT,GPIO_SPEED_MEDIUM,GPIO_OTYPE_PP,GPIO_NO_PUPD}};

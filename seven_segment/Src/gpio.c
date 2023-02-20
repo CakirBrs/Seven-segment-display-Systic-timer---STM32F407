@@ -1,8 +1,8 @@
 /*
  * gpio.c
  *
- *  Created on: 3 Ara 2022
- *      Author: metab
+ *
+ *      Author: Baris Cakir
  */
 #include "gpio.h"
 
@@ -54,14 +54,10 @@ PRIVATE uint8_t get_port_code(const GPIO_RegDef_t * pGpioX){
 void gpio_init(GPIO_Handle_t * pGpio_handle){
 	uint32_t temp=0;
 
-	//clock aktif et
+	//clock enable
 	gpio_perip_en(pGpio_handle->pGpioX);
-	/*
-	volatile uint32_t * p_rcc_ahb1_reg=(uint32_t*)(0x40023800+0x30);
-	*p_rcc_ahb1_reg |=(1u<<3);
-*/
 
-	//pin mode ayarla
+	//pin mode set
 	if(pGpio_handle->gPIO_pinConfig.pin_mode<=GPIO_MODE_ANALOG){
 		temp = (pGpio_handle->gPIO_pinConfig.pin_mode << (2 * pGpio_handle->gPIO_pinConfig.pin_number));
 		pGpio_handle->pGpioX->MODER &= ~(0b11<<(2*pGpio_handle->gPIO_pinConfig.pin_number));
@@ -92,38 +88,32 @@ void gpio_init(GPIO_Handle_t * pGpio_handle){
 
 		//Enable IMR
 		EXTI->IMR |= (1u<<pGpio_handle->gPIO_pinConfig.pin_number);
-		//NVIC
 	}
 
-	//speed ayarla
+	//speed set
 	temp = (pGpio_handle->gPIO_pinConfig.pin_speed << (2 * pGpio_handle->gPIO_pinConfig.pin_number));
 	pGpio_handle->pGpioX->OSPEEDR &= ~(0b11<<(2*pGpio_handle->gPIO_pinConfig.pin_number));
 	pGpio_handle->pGpioX->OSPEEDR |=temp;
 
-	//pull up pull down ayarla
+	//pull up pull down set
 	temp = (pGpio_handle->gPIO_pinConfig.pin_pupd << (2 * pGpio_handle->gPIO_pinConfig.pin_number));
 	pGpio_handle->pGpioX->PUPDR &= ~(0b11<<(2*pGpio_handle->gPIO_pinConfig.pin_number));
 	pGpio_handle->pGpioX->PUPDR |=temp;
 
-	//otype ayarla
+	//otype set
 	temp = (pGpio_handle->gPIO_pinConfig.pin_otype << (pGpio_handle->gPIO_pinConfig.pin_number));
 	pGpio_handle->pGpioX->OTYPER &= ~(0b1<<(pGpio_handle->gPIO_pinConfig.pin_number));
 	pGpio_handle->pGpioX->OTYPER |=temp;
 
-	//alternate func mode --ilerde
+	//alternate func mode
 	if(pGpio_handle->gPIO_pinConfig.pin_mode==GPIO_MODE_ALTERNATE){
 
 		uint8_t afr_low_high = pGpio_handle->gPIO_pinConfig.pin_number / 8;
 		uint8_t afr_pin_no = pGpio_handle->gPIO_pinConfig.pin_number % 8;
 
-		pGpio_handle->pGpioX->AFR[afr_low_high] &= ~(0X0F<<(4*afr_pin_no)); //  ??????
+		pGpio_handle->pGpioX->AFR[afr_low_high] &= ~(0X0F<<(4*afr_pin_no));
 		pGpio_handle->pGpioX->AFR[afr_low_high] |= (pGpio_handle->gPIO_pinConfig.pin_alternate_function_mode<<(4*afr_pin_no));
 	}
-
-	//bi portun pinine 1 mi 0 mı yazacağız....
-
-
-
 
 }
 
@@ -139,7 +129,7 @@ void  gpio_writeto_output_pin(GPIO_RegDef_t *pGpiox ,uint8_t pin_no, uint8_t val
 }
 
 void gpio_writeto_output_port(GPIO_RegDef_t *pGpiox ,uint16_t val){
-	pGpiox->ODR=val; //bitsel olarak değil direk data olarak yazıyoruz.
+	pGpiox->ODR=val;
 
 }
 
@@ -152,7 +142,6 @@ void gpio_toggleto_output_pin(GPIO_RegDef_t *pGpiox ,uint8_t pin_no){
 uint32_t gpio_read_input_pin(GPIO_RegDef_t *pGpiox, uint32_t pin_no){
 	uint32_t res;
 	res = pGpiox->IDR &(1u<<pin_no);
-	//return res;
 	return res!= 0? GPIO_PIN_SET : GPIO_PIN_RESET;
 }
 

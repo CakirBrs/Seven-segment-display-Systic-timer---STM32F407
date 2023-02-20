@@ -8,6 +8,7 @@ C_SRCS += \
 ../Src/coreM4.c \
 ../Src/gpio.c \
 ../Src/main.c \
+../Src/sevenSegment.c \
 ../Src/syscalls.c \
 ../Src/sysmem.c \
 ../Src/timer.c 
@@ -16,6 +17,7 @@ OBJS += \
 ./Src/coreM4.o \
 ./Src/gpio.o \
 ./Src/main.o \
+./Src/sevenSegment.o \
 ./Src/syscalls.o \
 ./Src/sysmem.o \
 ./Src/timer.o 
@@ -24,6 +26,7 @@ C_DEPS += \
 ./Src/coreM4.d \
 ./Src/gpio.d \
 ./Src/main.d \
+./Src/sevenSegment.d \
 ./Src/syscalls.d \
 ./Src/sysmem.d \
 ./Src/timer.d 
@@ -36,7 +39,7 @@ Src/%.o Src/%.su: ../Src/%.c Src/subdir.mk
 clean: clean-Src
 
 clean-Src:
-	-$(RM) ./Src/coreM4.d ./Src/coreM4.o ./Src/coreM4.su ./Src/gpio.d ./Src/gpio.o ./Src/gpio.su ./Src/main.d ./Src/main.o ./Src/main.su ./Src/syscalls.d ./Src/syscalls.o ./Src/syscalls.su ./Src/sysmem.d ./Src/sysmem.o ./Src/sysmem.su ./Src/timer.d ./Src/timer.o ./Src/timer.su
+	-$(RM) ./Src/coreM4.d ./Src/coreM4.o ./Src/coreM4.su ./Src/gpio.d ./Src/gpio.o ./Src/gpio.su ./Src/main.d ./Src/main.o ./Src/main.su ./Src/sevenSegment.d ./Src/sevenSegment.o ./Src/sevenSegment.su ./Src/syscalls.d ./Src/syscalls.o ./Src/syscalls.su ./Src/sysmem.d ./Src/sysmem.o ./Src/sysmem.su ./Src/timer.d ./Src/timer.o ./Src/timer.su
 
 .PHONY: clean-Src
 

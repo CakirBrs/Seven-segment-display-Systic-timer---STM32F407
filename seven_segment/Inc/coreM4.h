@@ -1,14 +1,13 @@
 /*
  * coreM4.h
  *
- *  Created on: 7 Oca 2023
- *      Author: metab
+ *
+ *      Author: Baris Cakir
  */
 
 #ifndef COREM4_H_
 #define COREM4_H_
 #include <stdint.h>
-//#include "stm32f407xx.h"
 
 
 //ARM Cortex M+ Processor Core Register
@@ -52,14 +51,12 @@ typedef struct{
 #define NVIC_ICERx							((NVIC_ICER_RegDef_t*)NVIC_ICER_BASEADDR)
 #define SYSTIC								((Systick_RegDef_t*) SYSTIC_BASEADDR)
 
-//#define CPU_CLOCK		(1u<<2)
 #define SYSTEM_FREQ 		16000000
 
 void nvic_irqno_enable(uint8_t irq_num);
 void nvic_irqno_disable(uint8_t irq_num);
 
 void systick_config(uint32_t tick);
-//void SysTick_Handler();
 
 
 typedef uint32_t clock_t;

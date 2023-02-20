@@ -1,8 +1,8 @@
 /*
  * timer.c
  *
- *  Created on: 12 Oca 2023
- *      Author: metab
+ *
+ *      Author: Baris Cakir
  */
 #include "timer.h"
 
@@ -37,18 +37,14 @@ static timer_clock_enable(TIM_RegDef_t * pTimerX){
 void timer_init(TIMNO e_timer_no, unsigned prescaler, unsigned period, unsigned repeat){
 
 	//clock enable
-	timer_clock_enable(timTab[e_timer_no]); // timer çevreselin clocku
+	timer_clock_enable(timTab[e_timer_no]);
 
-	//APB2 ve APB1 hatları (timer 1,8,9,10,11)
+	//APB2 ve APB1  (timer 1,8,9,10,11)
 
 	TIM_RegDef_t *p= timTab[e_timer_no];
 	p->ARR=period-1;
 	p->PSC=prescaler-1;
 
-	//if kontrolü yapıp advance timer ise kullan
-	//p->RCR = repeat-1;
-
-	//p->CNT=0;
 	timer_reset(e_timer_no);
 	p->CR1 |= (1U<<0); //timer enable
 
@@ -69,7 +65,7 @@ void timer_start(TIMNO e_timer_no, int bstart_stop){
 
 void timer_interrupt_config(TIMNO e_timer_no){
 	TIM_RegDef_t *pTimer= timTab[e_timer_no];
-	pTimer->DIER |= (1U<<0); // Çevresel kısımda kesme kaynağı aktif edildi.
+	pTimer->DIER |= (1U<<0);
 	nvic_irqno_enable(IRQ_TIM6_DAC);
 }
 
@@ -79,8 +75,8 @@ void TIM6_DAC_IRQHandler(){
 	static int a =0;
 	++a;
 	gpio_toggleto_output_pin(GPIOD, GPIO_PIN_NO_14);
-	//TIMER6->SR &= ~(1U<<0);
-	Clear_IT_PendingBit(); //makro
+
+	Clear_IT_PendingBit();
 
 }
 
@@ -89,8 +85,8 @@ int output_compare_init(TIMNO e_timer_no, unsigned prescaler, unsigned period, u
 		return -1;
 	}
 	//clock enable
-	timer_clock_enable(timTab[e_timer_no]); // timer çevreselin clocku
-	//APB2 ve APB1 hatları (timer 1,8,9,10,11)
+	timer_clock_enable(timTab[e_timer_no]);
+	//APB2 ve APB1  (timer 1,8,9,10,11)
 	TIM_RegDef_t *p= timTab[e_timer_no];
 	p->ARR=period-1;
 	p->PSC=prescaler-1;
@@ -131,8 +127,8 @@ int pwm_init(TIMNO e_timer_no, unsigned prescaler, unsigned period, unsigned dut
 			return -1;
 		}
 		//clock enable
-		timer_clock_enable(timTab[e_timer_no]); // timer çevreselin clocku
-		//APB2 ve APB1 hatları (timer 1,8,9,10,11)
+		timer_clock_enable(timTab[e_timer_no]);
+		//APB2 ve APB1  (timer 1,8,9,10,11)
 		TIM_RegDef_t *p= timTab[e_timer_no];
 		p->ARR=period-1;
 		p->PSC=prescaler-1;
@@ -155,10 +151,6 @@ int pwm_init(TIMNO e_timer_no, unsigned prescaler, unsigned period, unsigned dut
 
 		//polarity selection
 		p->CCER &= ~(1U<<1);
-
-
-
-
 
 		p->CCER |= (1U<<0);//Enable compare
 
